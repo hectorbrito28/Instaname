@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -62,6 +63,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     #OWN MIDDLEWARES
     "Platzi.middleware.completeaccount_middleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = 'Platzi.urls'
@@ -90,17 +92,13 @@ WSGI_APPLICATION = 'Platzi.wsgi.application'
 
 #Base deploy
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "Midatabase",
-        "USER":"MYNAME",
-        "PASSWORD":"SUPERDJANGOPASS",
-        "HOST":"127.0.0.1",
-        "PORT":"5432"
-    }
+    'default': dj_database_url.config(
+        # Feel free to alter this value to suit your needs.
+        default='postgresql://postgres:postgres@localhost/postgres',
+        conn_max_age=600
+    )
 }
 
-#ATOMIC_REQUESTS=True
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -174,3 +172,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 GEOIP_PATH = f"{BASE_DIR}/geoip/dbip-city-lite-2023-11.mmdb"
+
+
+
+
+
+if not DEBUG:
+    # Tell Django to copy statics to the `staticfiles` directory
+    # in your application directory on Render.
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+    # Turn on WhiteNoise storage backend that takes care of compressing static files
+    # and creating unique names for each version so they can safely be cached forever.
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
