@@ -147,9 +147,6 @@ LOGOUT_REDIRECT_URL = LOGIN_URL
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = ""#USADO EN EL DEPLOY
-
-
 #Indica la ruta para ver la imagen por URL
 MEDIA_URL = "/profile_images/"
 
@@ -158,6 +155,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR,"static")
 
 ###Static
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
@@ -180,7 +178,7 @@ GEOIP_PATH = f"{BASE_DIR}/geoip/dbip-city-lite-2023-11.mmdb"
 if not DEBUG:
     # Tell Django to copy statics to the `staticfiles` directory
     # in your application directory on Render.
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
     # Turn on WhiteNoise storage backend that takes care of compressing static files
     # and creating unique names for each version so they can safely be cached forever.
